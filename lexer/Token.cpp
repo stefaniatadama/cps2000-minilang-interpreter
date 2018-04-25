@@ -1,10 +1,9 @@
-//
-// Created by stefaniatadama on 19/03/2018.
-//
-
 #include "Token.h"
 
-Token::Token(TOKEN tok, string val) {
-    type = tok;
-    value = val;
+Token::Token() {}
+
+Token::Token(TOKEN tok, string val){
+    tokenType = tok;
+    stringTokenType =  tokens[tok];
+    lexeme = val;
 }

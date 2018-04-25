@@ -5,8 +5,14 @@
 #ifndef ASSIGNMENT_ASTNODE_H
 #define ASSIGNMENT_ASTNODE_H
 
+enum TYPE{
+    REAL, INT, BOOL, STRING
+};
 
-class ASTNode {
+class ASTNode{
+
+    public:
+        ASTNode();
 
 };
 
