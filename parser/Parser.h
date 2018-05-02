@@ -5,21 +5,26 @@
 #ifndef ASSIGNMENT_PARSER_H
 #define ASSIGNMENT_PARSER_H
 
-
 #include "../AST/ASTExpressionNode.h"
 #include "../lexer/Lexer.h"
 #include "../AST/ASTDeclarationStatementNode.h"
 #include "../AST/ASTLiteralExpressionNode.h"
 #include "../AST/ASTFunctionCallExpressionNode.h"
+#include "../AST/ASTAssignmentStatementNode.h"
+#include "../AST/ASTIfStatementNode.h"
+#include "../AST/ASTWhileStatementNode.h"
+#include "../AST/ASTFunctionDeclarationStatementNode.h"
+#include "../AST/ASTIdentifierExpressionNode.h"
+#include "../AST/ASTBlockStatementNode.h"
 
 class Parser {
 
     public:
-        Parser(Lexer&);
-        void parse();
+        Parser(Lexer*);
+        ASTProgramNode* parse();
 
     private:
-        Lexer lexer;
+        Lexer* lexer;
         Token currentToken;
 
         TYPE getType(string);
@@ -27,8 +32,6 @@ class Parser {
 
         ASTNode * parseStatement();
 
-        ASTExpressionNode * parseUnaryExpression();
-        ASTExpressionNode * parseBinaryExpression();
         ASTExpressionNode * parseExpression();
         ASTExpressionNode * parseSimpleExpression();
         ASTExpressionNode * parseTerm();
@@ -36,8 +39,15 @@ class Parser {
         ASTLiteralExpressionNode * parseLiteral();
         ASTFunctionCallExpressionNode * parseFunctionCall();
         vector<ASTExpressionNode*> * parseActualParams();
+        ASTBlockStatementNode * parseBlock();
+        vector<ASTIdentifierExpressionNode*> * parseFormalParams();
+        ASTIdentifierExpressionNode* parseFormalParam();
 
         ASTDeclarationStatementNode * parseVariableDeclaration();
+        ASTAssignmentStatementNode * parseAssignment();
+        ASTIfStatementNode * parseIfStatement();
+        ASTWhileStatementNode * parseWhileStatement();
+        ASTFunctionDeclarationStatementNode * parseFunctionDeclaration();
 };
 
 

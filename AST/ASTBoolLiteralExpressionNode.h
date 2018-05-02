@@ -14,6 +14,7 @@ class ASTBoolLiteralExpressionNode : public ASTLiteralExpressionNode{
         bool value;
 
         ASTBoolLiteralExpressionNode(bool);
+        void accept(Visitor* v);
 
 };
 

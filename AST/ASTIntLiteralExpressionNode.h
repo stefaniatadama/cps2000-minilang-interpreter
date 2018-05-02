@@ -13,7 +13,7 @@ class ASTIntLiteralExpressionNode : public ASTLiteralExpressionNode{
         int value;
 
         ASTIntLiteralExpressionNode(int);
-
+        void accept(Visitor* v);
 };
 
 

@@ -7,11 +7,12 @@
 
 #include "ASTNode.h"
 
-class ASTExpressionNode : ASTNode{
+class ASTExpressionNode : public ASTNode{
 
     public:
         ASTExpressionNode();
 
+        void accept(Visitor* v) override = 0;
 };
 
 

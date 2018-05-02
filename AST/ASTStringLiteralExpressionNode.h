@@ -14,6 +14,7 @@ class ASTStringLiteralExpressionNode : public ASTLiteralExpressionNode{
         string value;
 
         ASTStringLiteralExpressionNode(string);
+        void accept(Visitor* v);
 
 };
 

@@ -15,9 +15,10 @@ class ASTFunctionCallExpressionNode : public ASTExpressionNode{
 
     public:
         string functionName;
-        vector<ASTExpressionNode*>* argumentList;
+        vector<ASTExpressionNode*> argumentList;
 
-        ASTFunctionCallExpressionNode(vector<ASTExpressionNode*>*, string);
+        ASTFunctionCallExpressionNode(vector<ASTExpressionNode*>, string);
+        void accept(Visitor* v);
 };
 
 

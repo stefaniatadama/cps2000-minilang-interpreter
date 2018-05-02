@@ -14,8 +14,11 @@ class ASTIdentifierExpressionNode : public ASTExpressionNode{
 
     public:
         string identifierName;
+        TYPE identifierType;
 
         ASTIdentifierExpressionNode(string);
+        ASTIdentifierExpressionNode(string, TYPE);
+        void accept(Visitor* v);
 };
 
 

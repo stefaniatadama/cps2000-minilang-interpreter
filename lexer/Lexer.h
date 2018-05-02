@@ -37,7 +37,7 @@ class Lexer{
 
         //Last entry is ERR
         bool isFinal[23] = {false, true, false, true, true, true, true, false, true, true, true, true, false,
-                            true, true, true, false, false, true, false, false, true, false};
+                            true, true, true, true, false, true, false, false, true, false};
         int transitionTable[16][23] = {
             {1, 1, 3, 3, ERR, ERR, ERR, ERR, ERR, ERR, 10, ERR, 12, ERR, ERR, ERR, ERR, 17, ERR, 19, 19, ERR, ERR},
             {2, 3, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, 12, ERR, ERR, ERR, ERR, 17, ERR, 19, 19, ERR, ERR},
@@ -57,6 +57,7 @@ class Lexer{
             {ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, 12, ERR, ERR, ERR, ERR, 17, ERR, 19, 19, ERR, ERR}
         };
 
+        unsigned int getLineNumber(int);
         Token nextToken(string&, int&);
         int delta(int, char);
         void tokenise();

@@ -14,6 +14,7 @@ class ASTLiteralExpressionNode : public ASTExpressionNode{
 
     public:
         ASTLiteralExpressionNode();
+        void accept(Visitor* v) override = 0;
 };
 
 

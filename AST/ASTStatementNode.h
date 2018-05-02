@@ -11,6 +11,7 @@ class ASTStatementNode : public ASTNode{
 
     public:
         ASTStatementNode();
+        void accept(Visitor* v) override = 0;
 
 };
 

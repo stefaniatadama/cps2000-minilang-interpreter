@@ -8,6 +8,7 @@
 #include <string>
 #include "ASTStatementNode.h"
 #include "ASTExpressionNode.h"
+#include "ASTIdentifierExpressionNode.h"
 
 using namespace std;
 
@@ -16,12 +17,15 @@ class Parser;
 class ASTDeclarationStatementNode : public ASTStatementNode{
 
     public:
-        string variableName;
-        TYPE variableType;
-        ASTExpressionNode * left;
+        ASTIdentifierExpressionNode * variableIdentifier;
+//        string variableName;
+//        TYPE variableType;
+        ASTExpressionNode * variableExpression;
 
-        ASTDeclarationStatementNode(ASTExpressionNode *, string, TYPE);
+//        ASTDeclarationStatementNode(ASTExpressionNode *, string, TYPE);
+        ASTDeclarationStatementNode(ASTIdentifierExpressionNode*, ASTExpressionNode*);
 
+        void accept(Visitor* v);
 };
 
 

@@ -11,6 +11,17 @@ Lexer::Lexer(string &p){
     currentPosition = 0;
 }
 
+unsigned int Lexer::getLineNumber(int position){
+    unsigned int noOfLines = 1;
+
+    for(int i=0; i<position; i++){
+        if(program.at(i) == '\n')
+            noOfLines++;
+    }
+
+    return noOfLines;
+}
+
 Token Lexer::nextToken(string &program, int &position){
 
     int state = 0;
@@ -21,8 +32,17 @@ Token Lexer::nextToken(string &program, int &position){
     stack.push(BAD);
 
     //Handles whitespace and newline characters by incrementing i upon meeting one of them
-    while(program.at(i) == ' ' || program.at(i) == '\n')
+    while(i != program.length() && (program.at(i) == ' ' || program.at(i) == '\n')){
         i++;
+    }
+
+    //Manually adding EOF
+    if(i == program.length()){
+        lexeme = (char) EOF;
+        i++;
+        position = i;
+        return Token(TOK_EOF, lexeme, getLineNumber(i-1)); //i-1 since we have already incremented i
+    }
 
     while(state != ERR){
         currentChar = program.at(i);
@@ -56,96 +76,96 @@ Token Lexer::nextToken(string &program, int &position){
 
         switch(state){
             case 1:
-                return Token(TOK_IntLiteral, lexeme);
+                return Token(TOK_IntLiteral, lexeme, getLineNumber(i));
             case 3:
-                return Token(TOK_FloatLiteral, lexeme);
+                return Token(TOK_FloatLiteral, lexeme, getLineNumber(i));
             case 4:
-                return Token(TOK_AdditiveOp, lexeme);
+                return Token(TOK_AdditiveOp, lexeme, getLineNumber(i));
             case 5:
-                return Token(TOK_Equals, lexeme);
+                return Token(TOK_Equals, lexeme, getLineNumber(i));
             case 6:
-                return Token(TOK_RelOp, lexeme);
+                return Token(TOK_RelOp, lexeme, getLineNumber(i));
             case 8:
-                return Token(TOK_MultiplicativeOp, lexeme);
+                return Token(TOK_MultiplicativeOp, lexeme, getLineNumber(i));
             case 9:
-                return Token(TOK_RelOp, lexeme);
+                return Token(TOK_RelOp, lexeme, getLineNumber(i));
             case 10:{
                 if(lexeme == "real" || lexeme == "int" || lexeme == "bool" || lexeme == "string")
-                    return Token(TOK_LangType, lexeme);
+                    return Token(TOK_LangType, lexeme, getLineNumber(i));
 
                 else if(lexeme == "if")
-                    return Token(TOK_If, lexeme);
+                    return Token(TOK_If, lexeme, getLineNumber(i));
 
                 else if(lexeme == "else")
-                    return Token(TOK_Else, lexeme);
+                    return Token(TOK_Else, lexeme, getLineNumber(i));
 
                 else if(lexeme == "while")
-                    return Token(TOK_While, lexeme);
+                    return Token(TOK_While, lexeme, getLineNumber(i));
 
                 else if(lexeme == "def")
-                    return Token(TOK_Def, lexeme);
+                    return Token(TOK_Def, lexeme, getLineNumber(i));
 
                 else if(lexeme == "return")
-                    return Token(TOK_Return, lexeme);
+                    return Token(TOK_Return, lexeme, getLineNumber(i));
 
                 else if(lexeme == "set")
-                    return Token(TOK_Set, lexeme);
+                    return Token(TOK_Set, lexeme, getLineNumber(i));
 
                 else if(lexeme == "var")
-                    return Token(TOK_Var, lexeme);
+                    return Token(TOK_Var, lexeme, getLineNumber(i));
 
                 else if(lexeme == "print")
-                    return Token(TOK_Print, lexeme);
+                    return Token(TOK_Print, lexeme, getLineNumber(i));
 
                 else if(lexeme == "and")
-                    return Token(TOK_And, lexeme);
+                    return Token(TOK_And, lexeme, getLineNumber(i));
 
                 else if(lexeme == "or")
-                    return Token(TOK_Or, lexeme);
+                    return Token(TOK_Or, lexeme, getLineNumber(i));
 
                 else if(lexeme == "not")
-                    return Token(TOK_Not, lexeme);
+                    return Token(TOK_Not, lexeme, getLineNumber(i));
 
                 else if(lexeme == "true" || lexeme == "false")
-                    return Token(TOK_Boolean, lexeme);
+                    return Token(TOK_Boolean, lexeme, getLineNumber(i));
 
                 //If none of the above, it must be a variable name
                 else
-                    return Token(TOK_Identifier, lexeme);
+                    return Token(TOK_Identifier, lexeme, getLineNumber(i));
             }
             case 11:
-                return Token(TOK_EOF, lexeme);
+                return Token(TOK_EOF, lexeme, getLineNumber(i));
             case 13:{
                 if(lexeme == "{")
-                    return Token(TOK_OpenScope, lexeme);
+                    return Token(TOK_OpenScope, lexeme, getLineNumber(i));
 
                 else if(lexeme == "}")
-                    return Token(TOK_CloseScope, lexeme);
+                    return Token(TOK_CloseScope, lexeme, getLineNumber(i));
 
                 else if(lexeme == "(")
-                    return Token(TOK_OpenParenthesis, lexeme);
+                    return Token(TOK_OpenParenthesis, lexeme, getLineNumber(i));
 
                 else if(lexeme == ")")
-                    return Token(TOK_CloseParenthesis, lexeme);
+                    return Token(TOK_CloseParenthesis, lexeme, getLineNumber(i));
             }
             case 14:{
                 if(lexeme == ";")
-                    return Token(TOK_Delimeter, lexeme);
+                    return Token(TOK_Delimeter, lexeme, getLineNumber(i));
 
                 else if(lexeme == ":")
-                    return Token(TOK_Colon, lexeme);
+                    return Token(TOK_Colon, lexeme, getLineNumber(i));
 
                 else if(lexeme == ",")
-                    return Token(TOK_Comma, lexeme);
+                    return Token(TOK_Comma, lexeme, getLineNumber(i));
             }
             case 15:
-                return Token(TOK_String, lexeme);
+                return Token(TOK_String, lexeme, getLineNumber(i));
             case 16:
-                return Token(TOK_MultiplicativeOp, lexeme);
+                return Token(TOK_MultiplicativeOp, lexeme, getLineNumber(i));
             case 18:
-                return Token(TOK_Comment, lexeme);
+                return Token(TOK_Comment, lexeme, getLineNumber(i));
             case 21:
-                return Token(TOK_Comment, lexeme);
+                return Token(TOK_Comment, lexeme, getLineNumber(i));
         }
     }
 
@@ -242,18 +262,19 @@ Token Lexer::getNextToken(){
 
 Token Lexer::getLookahead(){
     unsigned int temp = currentPosition;
-    return program_tokens[++temp];
+
+    //Since getNextToken() never returns TOK_Comment
+    while(program_tokens[temp].tokenType == TOK_Comment)
+        temp++;
+
+    //currentPosition is already incremented by getNextToken so we simply return the token at currentPosition
+    return program_tokens[temp];
 }
 
 void Lexer::tokenise(){
     int position = 0;
 
-    while(position < program.length()-1){
+    while(position <= program.length()){
         program_tokens.push_back(nextToken(program, position));
     }
-
-    //Manually adding EOF token
-    string lexeme;
-    lexeme = (char) EOF;
-    program_tokens.push_back(Token(TOK_EOF, lexeme));
 }
