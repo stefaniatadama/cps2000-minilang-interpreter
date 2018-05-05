@@ -108,8 +108,6 @@ void XMLGeneratorVisitor::visit(ASTIdentifierExpressionNode* node){
     else{
         output << prefix << "<Identifier>" << node->identifierName << "</Identifier>" << endl;
     }
-
-
 }
 
 void XMLGeneratorVisitor::visit(ASTFunctionCallExpressionNode* node){
@@ -168,7 +166,7 @@ void XMLGeneratorVisitor::visit(ASTIfStatementNode* node){
     node->conditionExpression->accept(this);
     node->ifBody->accept(this);
 
-    if(node->elseBody != nullptr)
+    if(node->elseBody)
         node->elseBody->accept(this);
 
     currentIndent--;

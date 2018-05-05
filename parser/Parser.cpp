@@ -159,7 +159,7 @@ ASTFunctionCallExpressionNode* Parser::parseFunctionCall(){
     //Make currentToken '('
     currentToken = lexer->getNextToken();
 
-    vector<ASTExpressionNode*>* expressionNode;
+    auto expressionNode = new vector<ASTExpressionNode*>;
 
     //If next token is not ')', function is being passed some argument(s)
     if(lexer->getLookahead().tokenType != TOK_CloseParenthesis)
@@ -246,7 +246,7 @@ ASTLiteralExpressionNode* Parser::parseLiteral(){
         case(TOK_Boolean):
             return new ASTBoolLiteralExpressionNode(toBool(currentToken.lexeme));
         case(TOK_String):
-            return new ASTStringLiteralExpressionNode(currentToken.lexeme);
+            return new ASTStringLiteralExpressionNode(currentToken.lexeme.substr(1, currentToken.lexeme.size() - 2));
         default:
             return nullptr;
     }
@@ -336,7 +336,7 @@ ASTIfStatementNode* Parser::parseIfStatement(){
     }
 
     ASTBlockStatementNode* ifBody = parseBlock();
-    ASTBlockStatementNode* elseBody;
+    ASTBlockStatementNode* elseBody = nullptr;
 
     if(lexer->getLookahead().tokenType == TOK_Else){
         //Make current token 'else'

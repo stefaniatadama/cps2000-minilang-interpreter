@@ -8,6 +8,7 @@
 #include<vector>
 #include "../lexer/Token.h"
 #include "../AST/ASTIdentifierExpressionNode.h"
+#include "../AST/ASTFunctionDeclarationStatementNode.h"
 
 using namespace std;
 

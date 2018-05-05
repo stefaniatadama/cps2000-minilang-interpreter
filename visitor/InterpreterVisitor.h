@@ -1,33 +1,29 @@
 //
-// Created by stefaniatadama on 30/04/2018.
+// Created by stefaniatadama on 04/05/2018.
 //
 
-#ifndef ASSIGNMENT_SEMANTICANALYSERVISITOR_H
-#define ASSIGNMENT_SEMANTICANALYSERVISITOR_H
+#ifndef ASSIGNMENT_INTERPRETERVISITOR_H
+#define ASSIGNMENT_INTERPRETERVISITOR_H
 
 #include <stack>
-
 #include "Visitor.h"
-#include "../semantic_analysis/Scope.h"
+#include "../interpreter/InterpreterScope.h"
 
 using namespace std;
 
-class SemanticAnalyserVisitor : public Visitor{
+class InterpreterVisitor : public Visitor{
 
     public:
-        //Stores all scopes in the input program
-        stack<Scope*> scopes;
+        stack<InterpreterScope*> scopes;
+        varValue lastValue;
         TYPE lastType;
-        //Holds the parameters of current functions being declared
-        vector<pair<string, TYPE>> currentParams;
-        stack<TYPE> functionTypes;
+        //Vector holding a list of variable names, their types and their values assigned in a function call
+        vector<tuple<string, TYPE, varValue>> currentParams;
+        //Vector holding a list of variable names and their typesin a function declaration
+        //vector<tuple<string, TYPE>> currentFormalParams;
 
-        SemanticAnalyserVisitor();
-
-        string getStringType(TYPE);
-        Scope* getCurrentScope();
-        //Recursive function which checks if a statement returns
-        bool returns(ASTNode*);
+        InterpreterVisitor();
+        InterpreterScope* getCurrentScope();
 
         void visit(ASTProgramNode*);
         void visit(ASTAssignmentStatementNode*);
@@ -46,8 +42,7 @@ class SemanticAnalyserVisitor : public Visitor{
         void visit(ASTStringLiteralExpressionNode*);
         void visit(ASTUnaryExpressionNode*);
         void visit(ASTWhileStatementNode*);
-
 };
 
 
-#endif //ASSIGNMENT_SEMANTICANALYSERVISITOR_H
+#endif //ASSIGNMENT_INTERPRETERVISITOR_H

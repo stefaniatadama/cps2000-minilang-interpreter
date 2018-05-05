@@ -18,11 +18,8 @@ class ASTDeclarationStatementNode : public ASTStatementNode{
 
     public:
         ASTIdentifierExpressionNode * variableIdentifier;
-//        string variableName;
-//        TYPE variableType;
         ASTExpressionNode * variableExpression;
 
-//        ASTDeclarationStatementNode(ASTExpressionNode *, string, TYPE);
         ASTDeclarationStatementNode(ASTIdentifierExpressionNode*, ASTExpressionNode*);
 
         void accept(Visitor* v);

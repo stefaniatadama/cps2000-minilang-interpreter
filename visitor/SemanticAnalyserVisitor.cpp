@@ -14,8 +14,11 @@
 #include "../AST/ASTWhileStatementNode.h"
 #include "../AST/ASTPrintStatementNode.h"
 #include "../AST/ASTFunctionCallExpressionNode.h"
+#include "../AST/ASTUnaryExpressionNode.h"
 
 SemanticAnalyserVisitor::SemanticAnalyserVisitor(){
+    //Declaring the global scope
+    Scope* globalScope = new Scope();
     scopes.push(globalScope);
 }
 
@@ -51,10 +54,12 @@ bool SemanticAnalyserVisitor::returns(ASTNode* stmtNode){
         }
     }
 
-    //If it's an if statement, check if both if and else (if it exists) return, in which case it returns
+    /* If it's an if statement, check if both if and else blocks return. If there is no else,
+     * return false because the only way the block would return in that case is if there is a
+     * return below, which would be checked by the above cases.*/
     else if(ASTIfStatementNode* newStmtNode = dynamic_cast<ASTIfStatementNode*>(stmtNode)){
         if(newStmtNode->elseBody == nullptr)
-            return(returns(newStmtNode->ifBody));
+            return false;
         else
             return(returns(newStmtNode->ifBody) && returns(newStmtNode->elseBody));
     }
@@ -123,6 +128,8 @@ void SemanticAnalyserVisitor::visit(ASTFunctionDeclarationStatementNode* funcDec
     }
 
     //If we got to here, function signature does not exist so we can declare the given function.
+    getCurrentScope()->addSymbol(funcDeclNode);
+
     for(int i=0; i<funcDeclNode->formalParams.size(); i++){
         currentParams.push_back(pair<string, TYPE>(funcDeclNode->formalParams[i]->identifierName, functionSignature[i]));
     }
@@ -133,28 +140,6 @@ void SemanticAnalyserVisitor::visit(ASTFunctionDeclarationStatementNode* funcDec
     funcDeclNode->functionBody->accept(this);
 
     functionTypes.pop();
-
-
-//    //Add parameters to the new scope
-//    for(int i=0; i<funcDeclNode->formalParams.size(); i++){
-//        Symbol* sym = new Symbol(funcDeclNode->formalParams[i]->identifierType, funcDeclNode->formalParams[i]);
-//        getCurrentScope()->addSymbol(funcDeclNode->formalParams[i]->identifierName, sym);
-//    }
-//
-//    for(int i=0; i<funcDeclNode->functionBody->statements.size(); i++){
-//        //Find the return statement to check its type
-//        if(ASTReturnStatementNode* r = dynamic_cast<ASTReturnStatementNode*>(funcDeclNode->functionBody->statements[i])){
-//            r->expressionToReturn->accept(this);
-//            if(lastType == funcDeclNode->functionReturnType){
-//                currentScope->addSymbol(funcDeclNode);
-//                return;
-//            }
-//
-//            else
-//                throw runtime_error("Semantic error: function's return type is '" + getStringType(funcDeclNode->
-//                        functionReturnType)  + "' but it is returning a different type.");
-//        }
-//    }
 }
 
 //DONE
@@ -182,7 +167,6 @@ void SemanticAnalyserVisitor::visit(ASTBlockStatementNode* blockNode){
     }
 
     scopes.pop();
-    delete sym;
     delete scope;
 }
 
@@ -227,7 +211,7 @@ void SemanticAnalyserVisitor::visit(ASTReturnStatementNode* retNode){
         retNode->expressionToReturn->accept(this);
         if(lastType != functionTypes.top())
             throw runtime_error("Semantic error: function returns '" + getStringType(functionTypes.top()) + "' but return type is '"
-                                + getStringType(lastType));
+                                + getStringType(lastType) + "'.");
     }
 
     else {
@@ -252,19 +236,60 @@ void SemanticAnalyserVisitor::visit(ASTStringLiteralExpressionNode* stringNode){
     lastType = STRING;
 }
 
+//DONE
 void SemanticAnalyserVisitor::visit(ASTBinaryExpressionNode* binExpNode){
-    //Checking types of left and right operands match
+    //Checking that the types of left and right operands match
     binExpNode->left->accept(this);
-    TYPE left_type = lastType;
+    TYPE leftType = lastType;
 
     binExpNode->right->accept(this);
+    TYPE rightType = lastType;
 
-    if(lastType != left_type){
-        throw runtime_error("Semantic error: binary expression where left node has type '" + getStringType(left_type)
+    if(rightType != leftType){
+        throw runtime_error("Semantic error: binary expression where left node has type '" + getStringType(leftType)
                             + "' but right node has type '" + getStringType(lastType) + "'.");
     }
 
-    //If both have the same type, lastType is now set to their same type
+    //Checking that the binary operator can be used on the operand types
+    string binOp = binExpNode->op;
+
+    if(binOp == "-" || binOp == "*" || binOp == "/"){
+        //Only checking left type because we've already determined left and right types are the same
+        if(leftType != REAL && leftType != INT){
+            throw runtime_error("Semantic error: operator '" + binOp + "' cannot operate on type '" +
+                                getStringType(leftType) + "'.");
+        }
+        lastType = leftType;
+    }
+
+    else if(binOp == ">" || binOp == "<" || binOp == ">=" || binOp == "<="){
+        if(leftType != REAL && leftType != INT){
+            throw runtime_error("Semantic error: operator '" + binOp + "' cannot operate on type '" +
+                                getStringType(leftType) + "'.");
+        }
+        lastType = BOOL;
+    }
+
+    else if(binOp == "and" || binOp == "or"){
+        if(leftType != BOOL){
+            throw runtime_error("Semantic error: operator '" + binOp + "' cannot operate on type '" +
+                                getStringType(leftType) + "'.");
+        }
+        lastType = BOOL;
+    }
+
+    else if(binOp == "+"){
+        if(leftType == BOOL){
+            throw runtime_error("Semantic error: operator '" + binOp + "' cannot operate on type 'bool'.");
+        }
+        lastType = leftType;
+    }
+
+    else if(binOp == "==" || binOp == "!="){
+        lastType = BOOL;
+    }
+
+    else(throw runtime_error("Semantic error: bool operator '" + binOp + "' not valid."));
 }
 
 //DONE
@@ -291,7 +316,7 @@ void SemanticAnalyserVisitor::visit(ASTIdentifierExpressionNode* idNode){
     if(!exists)
         throw runtime_error("Semantic error: identifier '" + id + "' has not been declared.");
 
-    lastType = getCurrentScope()->getType(idNode->identifierName);
+    lastType = currentScope->getType(idNode->identifierName);
 }
 
 //DONE
@@ -317,10 +342,24 @@ void SemanticAnalyserVisitor::visit(ASTPrintStatementNode* printNode){
     printNode->expressionToPrint->accept(this);
 }
 
+//DONE
 void SemanticAnalyserVisitor::visit(ASTUnaryExpressionNode* unaryNode){
+    unaryNode->expressionNode->accept(this);
 
+    if(unaryNode->op == "+" || unaryNode->op == "-"){
+        if(lastType != INT && lastType != REAL){
+            throw runtime_error("Semantic error: cannot apply '"+ unaryNode->op + "' on type '" + getStringType(lastType) + "'.");
+        }
+    }
+
+    else if(unaryNode->op == "not"){
+        if (lastType != BOOL){
+            throw runtime_error("Semantic error: cannot apply 'not' on type '" + getStringType(lastType) + "'.");
+        }
+    }
 }
 
+//DONE
 void SemanticAnalyserVisitor::visit(ASTFunctionCallExpressionNode* funcCallNode){
     stack<Scope*> copyOfScopes = scopes;
     Scope* currentScope;
@@ -332,8 +371,8 @@ void SemanticAnalyserVisitor::visit(ASTFunctionCallExpressionNode* funcCallNode)
     bool validArgs = false;
 
     vector<TYPE> argsType;
-    for(int i=0; i<funcCallNode->argumentList.size(); i++){
-        funcCallNode->argumentList[i]->accept(this);
+    for(int i=0; i<funcCallArgs.size(); i++){
+        funcCallArgs[i]->accept(this);
         argsType.push_back(lastType);
     }
 
@@ -346,8 +385,7 @@ void SemanticAnalyserVisitor::visit(ASTFunctionCallExpressionNode* funcCallNode)
 
             if(currentScope->checkIfExists(funcName, argsType)) {
                 validArgs = true;
-                //TODO fix signature
-                lastType = currentScope->getReturnType(funcCallNode->functionName);
+                lastType = currentScope->getReturnType(funcName);
             }
         }
         copyOfScopes.pop();
@@ -357,5 +395,4 @@ void SemanticAnalyserVisitor::visit(ASTFunctionCallExpressionNode* funcCallNode)
         throw runtime_error("Semantic error: function '" + funcName + "' does not exist.");
     if(!validArgs)
         throw runtime_error("Semantic error: function '" + funcName + "' has different parameters.");
-
 }

@@ -6,6 +6,7 @@
 #include "parser/Parser.h"
 #include "visitor/XMLGeneratorVisitor.h"
 #include "visitor/SemanticAnalyserVisitor.h"
+#include "visitor/InterpreterVisitor.h"
 
 using namespace std;
 
@@ -40,8 +41,12 @@ int main() {
     XMLGeneratorVisitor xmlgen = XMLGeneratorVisitor();
     xmlgen.visit(prog);
 
-//    SemanticAnalyserVisitor analyser = SemanticAnalyserVisitor();
-//    analyser.visit(prog);
+    SemanticAnalyserVisitor analyser = SemanticAnalyserVisitor();
+    analyser.visit(prog);
+
+    cout << endl;
+    InterpreterVisitor interpreter = InterpreterVisitor();
+    interpreter.visit(prog);
 
     inFile.close();
 

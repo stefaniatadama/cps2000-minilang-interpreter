@@ -15,21 +15,13 @@ class Scope {
     public:
         //Symbol table with key string and value Symbol pointer
         multimap<string, Symbol*> symbolTable;
-//        //Defining a new name for an iterator of the multimap
-//        typedef multimap<string, Symbol*> MAPIterator;
+
         //Checks if there is a variable with the given name in symbol table
         bool isVariable(string);
         //Checks if there is a function with the given name in symbol table
         bool isFunction(string);
         //Check if function signature exists in symbol table
         bool checkIfExists(string, vector<TYPE>);
-
-
-
-//        //Check if given string is a variable or a function
-//        IDENTIFIER getIfVarOrFunc(string);
-
-
         //vector<ASTIdentifierExpressionNode*> getFunctionParams(string);
         //Get type of variable
         TYPE getType(string);
@@ -41,8 +33,6 @@ class Scope {
         //Change value of some variable
         void editSymbol(string, TYPE, ASTExpressionNode*);
         void deleteSymbol(string);
-
-
 };
 
 

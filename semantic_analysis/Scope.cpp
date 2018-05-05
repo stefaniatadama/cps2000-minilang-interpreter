@@ -2,6 +2,7 @@
 // Created by stefaniatadama on 30/04/2018.
 //
 
+#include <iostream>
 #include "Scope.h"
 #include "../AST/ASTDeclarationStatementNode.h"
 #include "../AST/ASTFunctionDeclarationStatementNode.h"
@@ -18,7 +19,6 @@ bool Scope::isVariable(string key){
 }
 
 bool Scope::isFunction(string key){
-    //pair<MAPIterator, MAPIterator> range;
     auto range = symbolTable.equal_range(key);
 
     for(auto i = range.first; i!= range.second; ++i){
@@ -30,14 +30,14 @@ bool Scope::isFunction(string key){
 }
 
 bool Scope::checkIfExists(string funcName, vector<TYPE> paramsTypes){
-    //pair<MAPIterator, MAPIterator> range;
     auto range = symbolTable.equal_range(funcName);
 
     vector<TYPE> foundParams;
 
-    /* Creating a vector of types of signatures of the functions found in symbol table
-     * and comparing them to those of the function being passed */
-    for(auto it = range.first; it!= range.second; ++it){
+    /* For every function found with the name funcName, place its types into a vector and
+     * compare them to the arguments being passed to the function */
+    for(auto it = range.first; it != range.second; ++it){
+
         if(it->second->id == FUNCTION){
 
             for(int i=0; i<it->second->params.size(); i++){
@@ -48,6 +48,9 @@ bool Scope::checkIfExists(string funcName, vector<TYPE> paramsTypes){
         if(paramsTypes == foundParams){
             return true;
         }
+
+        //Clearing foundParams vector for next use
+        foundParams.clear();
     }
 
     return false;
