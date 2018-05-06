@@ -23,6 +23,8 @@ class InterpreterVisitor : public Visitor{
         //vector<tuple<string, TYPE>> currentFormalParams;
 
         InterpreterVisitor();
+        InterpreterVisitor(InterpreterScope*);
+
         InterpreterScope* getCurrentScope();
 
         void visit(ASTProgramNode*);

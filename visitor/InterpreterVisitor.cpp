@@ -27,6 +27,10 @@ InterpreterVisitor::InterpreterVisitor(){
     scopes.push(globalScope);
 }
 
+InterpreterVisitor::InterpreterVisitor(InterpreterScope* global){
+    scopes.push(global);
+}
+
 InterpreterScope* InterpreterVisitor::getCurrentScope(){
     return scopes.top();
 }
@@ -45,15 +49,19 @@ void InterpreterVisitor::visit(ASTDeclarationStatementNode* declNode){
     switch(declNode->variableIdentifier->identifierType){
         case(INT):
             currentScope->setVariable(declNode->variableIdentifier->identifierName, lastValue.i);
+            break;
 
         case(REAL):
             currentScope->setVariable(declNode->variableIdentifier->identifierName, lastValue.r);
+            break;
 
         case(BOOL):
             currentScope->setVariable(declNode->variableIdentifier->identifierName, lastValue.b);
+            break;
 
         case(STRING):
             currentScope->setVariable(declNode->variableIdentifier->identifierName, lastValue.s);
+            break;
     }
 }
 
@@ -68,8 +76,6 @@ void InterpreterVisitor::visit(ASTFunctionDeclarationStatementNode* funcDeclNode
     }
 
     currentScope->addFunction(funcDeclNode->functionName, signature, funcDeclNode);
-
-    //TODO le hux? funcDeclNode->functionBody->accept(this);
 }
 
 void InterpreterVisitor::visit(ASTFunctionCallExpressionNode* funcCallNode){
@@ -99,6 +105,8 @@ void InterpreterVisitor::visit(ASTFunctionCallExpressionNode* funcCallNode){
                                                                       funcDeclNode->formalParams[j]->identifierType,
                                                                       lastValue));
             }
+
+            break;
         }
         copyOfScopes.pop();
     }
@@ -137,30 +145,6 @@ void InterpreterVisitor::visit(ASTBlockStatementNode* blockNode){
         currentParams.clear();
     }
 
-//    //If we're in a function declaration: add formal parameters and their types to current scope
-//    if(!currentFormalParams.empty()){
-//        for(int i=0; i<currentFormalParams.size(); i++){
-//            switch(get<1>(currentFormalParams[i])){
-//                case(INT):
-//                    newScope->setVariable(get<0>(currentFormalParams[i]), INT_MAX);
-//                    break;
-//
-//                case(REAL):
-//                    newScope->setVariable(get<0>(currentFormalParams[i]), FLT_MAX);
-//                    break;
-//
-//                case(BOOL):
-//                    newScope->setVariable(get<0>(currentFormalParams[i]), false);
-//                    break;
-//
-//                case(STRING):
-//                    newScope->setVariable(get<0>(currentFormalParams[i]), "");
-//                    break;
-//            }
-//        }
-//        currentFormalParams.clear();
-//    }
-
     for(int i=0; i<blockNode->statements.size(); i++){
         blockNode->statements[i]->accept(this);
     }
@@ -183,15 +167,19 @@ void InterpreterVisitor::visit(ASTAssignmentStatementNode* stmtNode){
             switch(currentScope->getVariableType(stmtNode->identifier->identifierName)) {
                 case (INT):
                     currentScope->setVariable(stmtNode->identifier->identifierName, lastValue.i);
+                    break;
 
                 case (REAL):
                     currentScope->setVariable(stmtNode->identifier->identifierName, lastValue.r);
+                    break;
 
                 case (BOOL):
                     currentScope->setVariable(stmtNode->identifier->identifierName, lastValue.b);
+                    break;
 
                 case (STRING):
                     currentScope->setVariable(stmtNode->identifier->identifierName, lastValue.s);
+                    break;
             }
         }
 
@@ -267,7 +255,7 @@ void InterpreterVisitor::visit(ASTBinaryExpressionNode* binExprNode){
         }
 
         else if(opType == REAL){
-            lastValue.r = leftVal.r < rightVal.r;
+            lastValue.b = leftVal.r < rightVal.r;
             lastType = BOOL;
         }
     }
@@ -279,7 +267,7 @@ void InterpreterVisitor::visit(ASTBinaryExpressionNode* binExprNode){
         }
 
         else if(opType == REAL){
-            lastValue.r = leftVal.r > rightVal.r;
+            lastValue.b = leftVal.r > rightVal.r;
             lastType = BOOL;
         }
     }
@@ -291,7 +279,7 @@ void InterpreterVisitor::visit(ASTBinaryExpressionNode* binExprNode){
         }
 
         else if(opType == REAL){
-            lastValue.r = leftVal.r <= rightVal.r;
+            lastValue.b = leftVal.r <= rightVal.r;
             lastType = BOOL;
         }
     }
@@ -303,7 +291,7 @@ void InterpreterVisitor::visit(ASTBinaryExpressionNode* binExprNode){
         }
 
         else if(opType == REAL){
-            lastValue.r = leftVal.r >= rightVal.r;
+            lastValue.b = leftVal.r >= rightVal.r;
             lastType = BOOL;
         }
     }
@@ -393,6 +381,7 @@ void InterpreterVisitor::visit(ASTIdentifierExpressionNode* idNode){
         if(currentScope->findVariable(idNode->identifierName)) {
             lastValue = currentScope->getVariableValue(idNode->identifierName);
             lastType = currentScope->getVariableType(idNode->identifierName);
+            break;
         }
 
         copyOfScopes.pop();
@@ -400,23 +389,20 @@ void InterpreterVisitor::visit(ASTIdentifierExpressionNode* idNode){
 }
 
 void InterpreterVisitor::visit(ASTUnaryExpressionNode* exprNode){
-    exprNode->accept(this);
+    exprNode->expressionNode->accept(this);
 
     if(exprNode->op == "-"){
         if(lastType == REAL){
-            exprNode->expressionNode->accept(this);
             lastValue.r = - lastValue.r;
             //lastType remains the same
         }
 
         else if(lastType == INT){
-            exprNode->expressionNode->accept(this);
             lastValue.i = - lastValue.i;
         }
     }
 
     else if(exprNode->op == "not"){
-        exprNode->expressionNode->accept(this);
         lastValue.b = !lastValue.b;
         lastType = BOOL;
     }
@@ -449,7 +435,6 @@ void InterpreterVisitor::visit(ASTWhileStatementNode* whileNode){
 
 void InterpreterVisitor::visit(ASTReturnStatementNode* retNode){
     retNode->expressionToReturn->accept(this);
-    //TODO actually return the value???
 }
 
 void InterpreterVisitor::visit(ASTPrintStatementNode* printNode){
@@ -458,7 +443,7 @@ void InterpreterVisitor::visit(ASTPrintStatementNode* printNode){
     switch(lastType){
         case (REAL): cout << lastValue.r << endl; break;
         case (INT): cout << lastValue.i << endl; break;
-        case (BOOL): cout << lastValue.b << endl; break;
+        case (BOOL): cout << ((lastValue.b) ? "true" : "false") << endl; break;
         case (STRING): cout << lastValue.s << endl; break;
     }
 }

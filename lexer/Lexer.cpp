@@ -256,7 +256,7 @@ Token Lexer::getNextToken(){
     while(program_tokens[currentPosition].tokenType == TOK_Comment)
         currentPosition++;
 
-    cout << "Current token: " << program_tokens[currentPosition].stringTokenType << endl;
+    //cout << "Current token: " << program_tokens[currentPosition].stringTokenType << endl;
     return program_tokens[currentPosition++];
 }
 

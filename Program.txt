@@ -1,6 +1,30 @@
-def fact(x:int):int{
-    if(x==0){return 1;}
-    else{return fact(x-1);}
+//Function approximating  the value of pi
+def approx_pi(m:real):real{
+
+    def pow(x:real, n:real): real{
+        var y:real = 1.0;
+        while(n>0.0){
+            set y = y * x;
+            set n = n - 1.0;
+        }
+
+        return y;
+    }
+
+    def denom(n:real):real{
+        return 2.0 * n + 1.0;
+
+    }
+
+    var pi:real = 0.0;
+    var i:real = 0.0;
+
+    while(i<m){
+        set pi = pi + 4.0 * pow(-1.0, i) / denom(i);
+        set i = i + 1.0;
+    }
+
+    return pi;
 }
 
-print fact(3);
+print approx_pi(150.0);

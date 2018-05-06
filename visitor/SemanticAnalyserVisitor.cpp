@@ -22,6 +22,10 @@ SemanticAnalyserVisitor::SemanticAnalyserVisitor(){
     scopes.push(globalScope);
 }
 
+SemanticAnalyserVisitor::SemanticAnalyserVisitor(Scope* global){
+    scopes.push(global);
+}
+
 string SemanticAnalyserVisitor::getStringType(TYPE type){
     if(type == REAL)
         return "real";
@@ -69,13 +73,11 @@ bool SemanticAnalyserVisitor::returns(ASTNode* stmtNode){
         return false;
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTProgramNode* progNode){
     for(int i=0; i<progNode->programStatements.size(); i++)
         progNode->programStatements[i]->accept(this);
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTDeclarationStatementNode * declNode){
     //Get the innermost scope, which is the one at the top of the scope pointer stack
     Scope* currentScope = getCurrentScope();
@@ -97,7 +99,6 @@ void SemanticAnalyserVisitor::visit(ASTDeclarationStatementNode * declNode){
     currentScope->addSymbol(declNode);
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTFunctionDeclarationStatementNode* funcDeclNode){
     /* When declaring a function, we need to check for the same signature in current scope and all scopes
      * below us in the stack */
@@ -142,7 +143,6 @@ void SemanticAnalyserVisitor::visit(ASTFunctionDeclarationStatementNode* funcDec
     functionTypes.pop();
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTBlockStatementNode* blockNode){
     //Create a new scope every time we meet a new block
     Scope* scope = new Scope();
@@ -170,7 +170,6 @@ void SemanticAnalyserVisitor::visit(ASTBlockStatementNode* blockNode){
     delete scope;
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTAssignmentStatementNode* asmtNode){
     //Going through all scopes in stack until we find the variable we are assigning to
     stack<Scope*> copyOfScopes = scopes;
@@ -204,7 +203,6 @@ void SemanticAnalyserVisitor::visit(ASTAssignmentStatementNode* asmtNode){
                             "' but expression is of type '" + getStringType(lastType) + "'.");
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTReturnStatementNode* retNode){
     //If we are in a function block
     if(!functionTypes.empty()){
@@ -236,7 +234,6 @@ void SemanticAnalyserVisitor::visit(ASTStringLiteralExpressionNode* stringNode){
     lastType = STRING;
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTBinaryExpressionNode* binExpNode){
     //Checking that the types of left and right operands match
     binExpNode->left->accept(this);
@@ -292,7 +289,6 @@ void SemanticAnalyserVisitor::visit(ASTBinaryExpressionNode* binExpNode){
     else(throw runtime_error("Semantic error: bool operator '" + binOp + "' not valid."));
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTIdentifierExpressionNode* idNode){
     //Going through all scopes in stack until we find the variable
     stack<Scope*> copyOfScopes = scopes;
@@ -319,30 +315,33 @@ void SemanticAnalyserVisitor::visit(ASTIdentifierExpressionNode* idNode){
     lastType = currentScope->getType(idNode->identifierName);
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTIfStatementNode* ifNode){
     ifNode->conditionExpression->accept(this);
 
     if(lastType != BOOL){
         throw runtime_error("Semantic error: if condition is not of type 'bool'.");
     }
+
+    ifNode->ifBody->accept(this);
+
+    if(ifNode->elseBody != nullptr)
+        ifNode->elseBody->accept(this);
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTWhileStatementNode* whileNode){
     whileNode->conditionExpression->accept(this);
 
     if(lastType != BOOL){
         throw runtime_error("Semantic error: while condition is not of type 'bool'.");
     }
+
+    whileNode->whileBody->accept(this);
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTPrintStatementNode* printNode){
     printNode->expressionToPrint->accept(this);
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTUnaryExpressionNode* unaryNode){
     unaryNode->expressionNode->accept(this);
 
@@ -359,7 +358,6 @@ void SemanticAnalyserVisitor::visit(ASTUnaryExpressionNode* unaryNode){
     }
 }
 
-//DONE
 void SemanticAnalyserVisitor::visit(ASTFunctionCallExpressionNode* funcCallNode){
     stack<Scope*> copyOfScopes = scopes;
     Scope* currentScope;

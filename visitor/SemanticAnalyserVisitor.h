@@ -23,6 +23,7 @@ class SemanticAnalyserVisitor : public Visitor{
         stack<TYPE> functionTypes;
 
         SemanticAnalyserVisitor();
+        SemanticAnalyserVisitor(Scope*);
 
         string getStringType(TYPE);
         Scope* getCurrentScope();
