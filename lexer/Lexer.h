@@ -5,7 +5,7 @@
 #include <vector>
 #include "Token.h"
 
-#define ERR 22 //nehhi - biddel biex jigi tal-ahhar
+#define ERR 22
 #define BAD -1
 
 using namespace std;

@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 28/04/2018.
-//
-
 #ifndef ASSIGNMENT_VISITOR_H
 #define ASSIGNMENT_VISITOR_H
 

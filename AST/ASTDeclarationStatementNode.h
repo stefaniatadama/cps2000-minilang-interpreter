@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 23/04/2018.
-//
-
 #ifndef ASSIGNMENT_ASTDECLARATIONSTATEMENT_H
 #define ASSIGNMENT_ASTDECLARATIONSTATEMENT_H
 

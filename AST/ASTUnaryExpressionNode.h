@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 02/05/2018.
-//
-
 #ifndef ASSIGNMENT_ASTUNARYEXPRESSIONNODE_H
 #define ASSIGNMENT_ASTUNARYEXPRESSIONNODE_H
 

@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 30/04/2018.
-//
-
 #ifndef ASSIGNMENT_SEMANTICANALYSERVISITOR_H
 #define ASSIGNMENT_SEMANTICANALYSERVISITOR_H
 

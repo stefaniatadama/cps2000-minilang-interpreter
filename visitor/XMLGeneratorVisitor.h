@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 28/04/2018.
-//
-
 #ifndef ASSIGNMENT_XMLGENERATORVISITOR_H
 #define ASSIGNMENT_XMLGENERATORVISITOR_H
 

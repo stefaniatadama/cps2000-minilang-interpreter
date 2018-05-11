@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 04/05/2018.
-//
-
 #include <climits>
 #include <cfloat>
 #include <iostream>
@@ -71,8 +67,6 @@ void InterpreterVisitor::visit(ASTFunctionDeclarationStatementNode* funcDeclNode
     vector<TYPE> signature;
     for(int i=0; i<funcDeclNode->formalParams.size(); i++){
         signature.push_back(funcDeclNode->formalParams[i]->identifierType);
-        //currentFormalParams.push_back(tuple<string, TYPE>(funcDeclNode->formalParams[i]->identifierName,
-                                                          //funcDeclNode->formalParams[i]->identifierType));
     }
 
     currentScope->addFunction(funcDeclNode->functionName, signature, funcDeclNode);
@@ -101,7 +95,7 @@ void InterpreterVisitor::visit(ASTFunctionCallExpressionNode* funcCallNode){
             for(int j=0; j<funcCallNode->argumentList.size(); j++){
                 funcCallNode->argumentList[j]->accept(this); //This will change the value of lastValue
 
-                currentParams.push_back(tuple<string, TYPE, varValue>(funcDeclNode->formalParams[j]->identifierName,
+                currentParams.push_back(tuple<string, TYPE, VarValue>(funcDeclNode->formalParams[j]->identifierName,
                                                                       funcDeclNode->formalParams[j]->identifierType,
                                                                       lastValue));
             }
@@ -190,10 +184,10 @@ void InterpreterVisitor::visit(ASTAssignmentStatementNode* stmtNode){
 void InterpreterVisitor::visit(ASTBinaryExpressionNode* binExprNode){
     binExprNode->left->accept(this);
     TYPE opType = lastType;
-    varValue leftVal = lastValue;
+    VarValue leftVal = lastValue;
 
     binExprNode->right->accept(this);
-    varValue rightVal = lastValue;
+    VarValue rightVal = lastValue;
 
     if(binExprNode->op == "+"){
         if(opType == INT){

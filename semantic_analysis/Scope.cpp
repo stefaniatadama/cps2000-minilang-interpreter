@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 30/04/2018.
-//
-
 #include <iostream>
 #include "Scope.h"
 #include "../AST/ASTDeclarationStatementNode.h"

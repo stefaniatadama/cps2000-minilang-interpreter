@@ -6,31 +6,31 @@
 #include "../AST/ASTDeclarationStatementNode.h"
 
 void InterpreterScope::setVariable(string name, int val){
-    varValue var;
+    VarValue var;
     var.i = val;
 
-    variables[name] = pair<TYPE, varValue>(INT, var);
+    variables[name] = pair<TYPE, VarValue>(INT, var);
 }
 
 void InterpreterScope::setVariable(string name, float val){
-    varValue var;
+    VarValue var;
     var.r = val;
 
-    variables[name] = pair<TYPE, varValue>(REAL, var);
+    variables[name] = pair<TYPE, VarValue>(REAL, var);
 }
 
 void InterpreterScope::setVariable(string name, bool val){
-    varValue var;
+    VarValue var;
     var.b = val;
 
-    variables[name] = pair<TYPE, varValue>(BOOL, var);
+    variables[name] = pair<TYPE, VarValue>(BOOL, var);
 }
 
 void InterpreterScope::setVariable(string name, string val){
-    varValue var;
+    VarValue var;
     var.s = val;
 
-    variables[name] = pair<TYPE, varValue>(STRING, var);
+    variables[name] = pair<TYPE, VarValue>(STRING, var);
 }
 
 void InterpreterScope::addFunction(string name, vector<TYPE> signature, ASTFunctionDeclarationStatementNode* funcDeclNode){
@@ -70,6 +70,6 @@ TYPE InterpreterScope::getVariableType(string name){
     return variables.find(name)->second.first;
 }
 
-varValue InterpreterScope::getVariableValue(string name){
+VarValue InterpreterScope::getVariableValue(string name){
     return(variables.find(name)->second.second);
 }

@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 28/04/2018.
-//
-
 #include <vector>
 #include "XMLGeneratorVisitor.h"
 
@@ -131,9 +127,6 @@ void XMLGeneratorVisitor::visit(ASTDeclarationStatementNode* node){
 
     prefix = setIndent();
     node->variableIdentifier->accept(this);
-
-//    output << prefix << "<Identifier Type=\"" << types[node->variableName->identifierType] << "\">" <<
-//           node->variableName->identifierName << "</Identifier>" << endl;
 
     node->variableExpression->accept(this);
 

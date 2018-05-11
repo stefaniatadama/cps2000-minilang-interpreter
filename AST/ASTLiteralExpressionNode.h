@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 25/04/2018.
-//
-
 #ifndef ASSIGNMENT_ASTLITERALEXPRESSIONNODE_H
 #define ASSIGNMENT_ASTLITERALEXPRESSIONNODE_H
 

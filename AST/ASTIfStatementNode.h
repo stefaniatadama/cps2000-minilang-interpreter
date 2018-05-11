@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 26/04/2018.
-//
-
 #ifndef ASSIGNMENT_ASTIFSTATEMENTNODE_H
 #define ASSIGNMENT_ASTIFSTATEMENTNODE_H
 

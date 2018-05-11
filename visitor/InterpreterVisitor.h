@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 04/05/2018.
-//
-
 #ifndef ASSIGNMENT_INTERPRETERVISITOR_H
 #define ASSIGNMENT_INTERPRETERVISITOR_H
 
@@ -15,12 +11,10 @@ class InterpreterVisitor : public Visitor{
 
     public:
         stack<InterpreterScope*> scopes;
-        varValue lastValue;
+        VarValue lastValue;
         TYPE lastType;
         //Vector holding a list of variable names, their types and their values assigned in a function call
-        vector<tuple<string, TYPE, varValue>> currentParams;
-        //Vector holding a list of variable names and their typesin a function declaration
-        //vector<tuple<string, TYPE>> currentFormalParams;
+        vector<tuple<string, TYPE, VarValue>> currentParams;
 
         InterpreterVisitor();
         InterpreterVisitor(InterpreterScope*);
@@ -45,6 +39,5 @@ class InterpreterVisitor : public Visitor{
         void visit(ASTUnaryExpressionNode*);
         void visit(ASTWhileStatementNode*);
 };
-
 
 #endif //ASSIGNMENT_INTERPRETERVISITOR_H

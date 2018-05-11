@@ -45,7 +45,12 @@ Token Lexer::nextToken(string &program, int &position){
     }
 
     while(state != ERR){
-        currentChar = program.at(i);
+        try {
+            currentChar = program.at(i);
+        }catch(const exception &e){
+            throw invalid_argument("Lexical error - cannot end program with single line comment.");
+        }
+
         lexeme += currentChar;
 
         if(isFinal[state]){
@@ -189,7 +194,7 @@ int Lexer::delta(int state, char c) {
         case '7':
         case '8':
         case '9':
-            classifier = DIGIT; //nehhi - refer to Lexer.h enum
+            classifier = DIGIT;
             break;
         case '.':
             classifier = POINT;
@@ -256,7 +261,7 @@ Token Lexer::getNextToken(){
     while(program_tokens[currentPosition].tokenType == TOK_Comment)
         currentPosition++;
 
-    //cout << "Current token: " << program_tokens[currentPosition].stringTokenType << endl;
+    //cout << "Current token: " << program_tokens[currentPosition].stringTokenType << endl; //Used for testing
     return program_tokens[currentPosition++];
 }
 

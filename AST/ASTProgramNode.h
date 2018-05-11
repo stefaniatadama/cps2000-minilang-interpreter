@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 28/04/2018.
-//
-
 #ifndef ASSIGNMENT_ASTPROGRAMNODE_H
 #define ASSIGNMENT_ASTPROGRAMNODE_H
 

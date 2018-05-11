@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 22/04/2018.
-//
-
 #ifndef ASSIGNMENT_ASTBINARYEXPRESSIONNODE_H
 #define ASSIGNMENT_ASTBINARYEXPRESSIONNODE_H
 

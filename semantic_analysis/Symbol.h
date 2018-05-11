@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 30/04/2018.
-//
-
 #ifndef ASSIGNMENT_SYMBOL_H
 #define ASSIGNMENT_SYMBOL_H
 

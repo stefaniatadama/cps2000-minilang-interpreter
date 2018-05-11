@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 22/04/2018.
-//
-
 #ifndef ASSIGNMENT_PARSER_H
 #define ASSIGNMENT_PARSER_H
 
@@ -22,6 +18,7 @@ class Parser {
     public:
         Parser(Lexer*);
         ASTProgramNode* parse();
+        ASTExpressionNode * parseExpression();
 
     private:
         Lexer* lexer;
@@ -32,7 +29,6 @@ class Parser {
 
         ASTNode * parseStatement();
 
-        ASTExpressionNode * parseExpression();
         ASTExpressionNode * parseSimpleExpression();
         ASTExpressionNode * parseTerm();
         ASTExpressionNode * parseFactor();

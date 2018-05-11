@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 30/04/2018.
-//
-
 #ifndef ASSIGNMENT_SCOPE_H
 #define ASSIGNMENT_SCOPE_H
 

@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 02/05/2018.
-//
-
 #include "ASTUnaryExpressionNode.h"
 
 ASTUnaryExpressionNode::ASTUnaryExpressionNode(string oprtr, ASTExpressionNode* exprNode){

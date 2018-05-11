@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 25/04/2018.
-//
-
 #include <iostream>
 #include "ASTIdentifierExpressionNode.h"
 

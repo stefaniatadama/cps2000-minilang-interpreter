@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 04/05/2018.
-//
-
 #ifndef ASSIGNMENT_INTERPRETERSCOPE_H
 #define ASSIGNMENT_INTERPRETERSCOPE_H
 
@@ -11,9 +7,9 @@
 
 using namespace std;
 
-struct varValue{
-    int i;
+struct VarValue{
     float r;
+    int i;
     bool b;
     string s;
 };
@@ -22,7 +18,7 @@ class InterpreterScope {
 
     public:
         //Map for variables
-        map<string, pair<TYPE, varValue>> variables;
+        map<string, pair<TYPE, VarValue>> variables;
         //Multimap for functions
         multimap<string, pair<vector<TYPE>, ASTFunctionDeclarationStatementNode*>> functions;
 
@@ -36,7 +32,7 @@ class InterpreterScope {
         ASTFunctionDeclarationStatementNode* getFunction(string, vector<TYPE>);
         bool findVariable(string);
         TYPE getVariableType(string);
-        varValue getVariableValue(string);
+        VarValue getVariableValue(string);
 };
 
 

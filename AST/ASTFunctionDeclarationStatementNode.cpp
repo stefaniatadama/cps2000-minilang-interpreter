@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 27/04/2018.
-//
-
 #include "ASTFunctionDeclarationStatementNode.h"
 
 ASTFunctionDeclarationStatementNode::ASTFunctionDeclarationStatementNode(string funcName,

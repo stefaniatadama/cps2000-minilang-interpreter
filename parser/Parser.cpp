@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 22/04/2018.
-//
-
 #include <stdexcept>
 #include <vector>
 #include <iostream>
@@ -203,7 +199,7 @@ ASTExpressionNode* Parser::parseFactor(){
             return literalNode;
         }
 
-        /*Identifier & FunctionCall
+        /* Identifier & FunctionCall
          * Upon meeting an identifier, we check if there is a parenthesis directly after it,
          * in which case it would be a function call */
         case(TOK_Identifier):{
@@ -289,7 +285,6 @@ ASTDeclarationStatementNode* Parser::parseVariableDeclaration(){
         throw runtime_error("Unexpected token on line " + to_string(currentToken.lineNumber) + ": expected ';' at the end of statement.");
     }
 
-//    return new ASTDeclarationStatementNode(expressionNode, identifier, type);
     return new ASTDeclarationStatementNode(identifierExpressionNode, expressionNode);
 }
 
@@ -317,7 +312,6 @@ ASTAssignmentStatementNode* Parser::parseAssignment(){
         throw runtime_error("Unexpected token on line " + to_string(currentToken.lineNumber) + ": expected ';' at the end of statement.");
     }
 
-//    return new ASTAssignmentStatementNode(expressionNode, identifier);
     return new ASTAssignmentStatementNode(identifierExpressionNode, expressionNode);
 }
 
@@ -453,8 +447,6 @@ vector<ASTIdentifierExpressionNode*>* Parser::parseFormalParams(){
 }
 
 ASTIdentifierExpressionNode* Parser::parseFormalParam(){
-    //currentToken = lexer->getNextToken();
-
     if(currentToken.tokenType != TOK_Identifier){
         throw runtime_error("Unexpected token on line " + to_string(currentToken.lineNumber) + ": expected identifier.");
     }

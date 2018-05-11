@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 26/04/2018.
-//
-
 #include "ASTIfStatementNode.h"
 
 ASTIfStatementNode::ASTIfStatementNode(ASTExpressionNode * condition, ASTBlockStatementNode* ifBlock, ASTBlockStatementNode* elseBlock){

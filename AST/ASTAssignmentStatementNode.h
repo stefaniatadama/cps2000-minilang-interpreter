@@ -1,7 +1,3 @@
-//
-// Created by stefaniatadama on 26/04/2018.
-//
-
 #ifndef ASSIGNMENT_ASTASSIGNMENTSTATEMENTNODE_H
 #define ASSIGNMENT_ASTASSIGNMENTSTATEMENTNODE_H
 
@@ -16,7 +12,6 @@ class ASTAssignmentStatementNode : public ASTStatementNode{
 
     public:
         ASTIdentifierExpressionNode* identifier;
-//        string identifier;
         ASTExpressionNode* assignmentExpression;
 
         ASTAssignmentStatementNode(ASTIdentifierExpressionNode*, ASTExpressionNode*);
