@@ -82,7 +82,7 @@ MiniLang is defined by the following EBNF.
 
 
 # Instructions
-To run the MiniLang REPL, run the following commands in the root directory:
+To use the MiniLang REPL, run the following commands in the root directory:
 
     cmake .
     make
