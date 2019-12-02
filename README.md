@@ -29,6 +29,56 @@ The following is a syntactically and semantically correct MiniLang program:
     print funcGreaterThan (x , 2.3) ;                   // true
     print funcGreaterThan (x , funcSquare(1.555)) ;     // false
 
+MiniLang is defined by the following EBNF.
+
+    <Letter>            ::= [A-Za-z]
+    <Digit>             ::= [0-9]
+    <Printable>         ::= [\x20-\x7E]
+    <Type>              ::= ‘real’ | ‘int’ | ‘bool’ | ‘string’
+    <BooleanLiteral>    ::= ‘true’ | ‘false’
+    <IntegerLiteral>    ::= <Digit> { <Digit> }
+    <RealLiteral>       ::= <Digit> { <Digit> } ‘.’ <Digit> { <Digit> }
+    <StringLiteral>     ::= ‘"’ { <Printable> } ‘"’
+    <Literal>           ::= <BooleanLiteral> 
+                            | <IntegerLiteral> 
+                            | <RealLiteral> 
+                            | <StringLiteral>
+    <Identifier>        ::= ( ‘ ’ | <Letter> ) { ‘ ’ | <Letter> | <Digit> }
+    <MultiplicativeOp>  ::= ‘*’ | ‘/’ | ‘and’
+    <AdditiveOp>        ::= ‘+’ | ‘-’ | ‘or’
+    <RelationalOp>      ::= ‘<’ | ‘>’ | ‘==’ | ‘!=’ | ‘<=’ | ‘>=’
+    <ActualParams>      ::= <Expression> { ‘,’ <Expression> }
+    <FunctionCall>      ::= <Identifier> ‘(’ [ <ActualParams> ] ‘)’
+    <SubExpression>     ::= ‘(’ <Expression> ‘)’
+    <Unary>             ::= ( ‘-’ | ‘not’ ) <Expression>
+    <Factor>            ::= <Literal> 
+                            | <Identifier> 
+                            | <FunctionCall> 
+                            | <SubExpression> 
+                            | <Unary>
+    <Term>              ::= <Factor> { <MultiplicativeOp> <Factor> }
+    <SimpleExpressioni  ::= <Term> { <AdditiveOp> <Term> }
+    <Expression>        ::= <SimpleExpression> { <RelationalOp> <SimpleExpression> }
+    <Assignment>        ::= ‘set’ <Identifier> ‘=’ <Expression>
+    <VariableDecl>      ::= ‘var’ <Identifier> ‘:’ <Type> ‘=’ <Expression>
+    <PrintStatement>    ::= ‘print’ <Expression>
+    <ReturnStatement>   ::= ‘return’ <Expression>
+    <IfStatement>       ::= ‘if’ ‘(’ <Expression> ‘)’ <Block> [ ‘else’ <Block> ]
+    <WhileStatement>    ::= ‘while’ ‘(’ <Expression> ‘)’ <Block>
+    <FormalParam>       ::= <Identifier> ‘:’ <Type>
+    <FormalParams>      ::= <FormalParam> { ‘,’ <FormalParam> }
+    <FunctionDecl>      ::= ‘def’ <Identifier> ‘(’ [ <FormalParams> ] ‘)’ ‘:’ <Type> <Block>
+    <Statement>         ::= <VariableDecl> ‘;’ 
+                            | <Assignment> ‘;’ 
+                            | <PrintStatement> ‘;’ 
+                            | <IfStatement> 
+                            | <WhileStatement> 
+                            | <ReturnStatement> ‘;’ 
+                            | <FunctionDecl> ‘;’ 
+                            | <Block>
+    <Block>             ::= ‘{’ { <Statement> } ‘}’
+    <Program>           ::= { <Statement> }
+
 
 
 # Instructions
@@ -37,3 +87,6 @@ To run the MiniLang REPL, run the following commands in the root directory:
     cmake .
     make
     ./MiniLangI
+    
+# Documentation
+For a more detailed report on all the steps involved, refer to [document_compilers.pdf](https://github.com/stefaniatadama/cps2000-minilang-interpreter/blob/master/document_compilers.pdf).
