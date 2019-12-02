@@ -9,5 +9,5 @@ def is_greater_than(z:real, x : real, y : real) : bool {
     return ans;
 }
 var y:real = 5.;
-print y;                                         /* 6.25 */
+print y;
 print is_greater_than(1.0, square(1.5), 2.0);
