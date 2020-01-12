@@ -87,6 +87,3 @@ To use the MiniLang REPL, run the following commands in the root directory:
     cmake .
     make
     ./MiniLangI
-    
-# Documentation
-For a more detailed report on all the steps involved, refer to [document_compilers.pdf](https://github.com/stefaniatadama/cps2000-minilang-interpreter/blob/master/document_compilers.pdf).
